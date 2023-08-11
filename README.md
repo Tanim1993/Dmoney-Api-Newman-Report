@@ -1,6 +1,6 @@
 # Dmoney-Api-Newman-Report
 
-##**How to run this project**
+##How to run this project**
 -clone the project
 -give this command '''' npm i '''' and  ''''node .\report'''
 
@@ -17,21 +17,30 @@
 
 ## Test Cases:
 
-Status code is 200
-Response contains message and token
-Token exists and not empty
-Token format is JWT
-Role is Customer
-Status code is 200
-Response contains message, count, and users
-Count is greater than zero
-Each user has a valid ID
-Response contains message and user
-User has a valid ID
-User has the correct role
-Status code is 200
-Response contains message and user
-User has the correct role
+Test Case 1: Verify Successful Login
+- Verify that the status code is 200
+- Verify that the response contains a message and a token
+- Verify that the token exists and is not empty
+- Verify that the token format is JWT
+- Verify that the user role is Customer
+
+Test Case 2: Verify User Retrieval
+- Verify that the status code is 200
+- Verify that the response contains a message, count, and users
+- Verify that the count is greater than zero
+- Verify that each user has a valid ID
+
+Test Case 3: Verify User Details
+- Verify that the status code is 200
+- Verify that the response contains a message and a user
+- Verify that the user has a valid ID
+- Verify that the user has the correct role
+
+Test Case 4: Verify Role-Based Access
+- Verify that the status code is 200
+- Verify that the response contains a message and a user
+- Verify that the user has the correct role
+
 
 Image : 
 
