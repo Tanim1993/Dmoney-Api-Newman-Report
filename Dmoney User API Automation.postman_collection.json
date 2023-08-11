@@ -1,0 +1,442 @@
+{
+	"info": {
+		"_postman_id": "86d37469-9c44-495d-b378-ec41c417373b",
+		"name": "Dmoney User API Automation",
+		"description": "Documentation for Dmoney User API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15885270"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"postman.setEnvironmentVariable(\"token\", jsonData.token);\r",
+							"\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response contains message and token\", function () {\r",
+							"    pm.response.to.have.jsonBody('message', 'Login successfully');\r",
+							"    pm.response.to.have.jsonBody('token');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Token exists and not empty\", function () {\r",
+							"    pm.expect(pm.response.json().token).to.exist;\r",
+							"    pm.expect(pm.response.json().token).to.not.eql('');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Token format is JWT\", function () {\r",
+							"    const token = pm.response.json().token;\r",
+							"    const parts = token.split('.');\r",
+							"    pm.expect(parts.length).to.eql(3); // JWT consists of three parts separated by dots\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Role is Customer\", function () {\r",
+							"    pm.response.to.have.jsonBody('role', 'Customer');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "X-AUTH-SECRET-KEY",
+						"value": "ROADTOSDET",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"salman@roadtocareer.net\",\n    \"password\":\"1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://dmoney.roadtocareer.net/user/login",
+					"protocol": "http",
+					"host": [
+						"dmoney",
+						"roadtocareer",
+						"net"
+					],
+					"path": [
+						"user",
+						"login"
+					]
+				},
+				"description": "Endpoint to log in a user."
+			},
+			"response": []
+		},
+		{
+			"name": "User List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response contains message, count, and users\", function () {\r",
+							"    pm.response.to.have.jsonBody('message', 'User list');\r",
+							"    pm.response.to.have.jsonBody('count');\r",
+							"    pm.response.to.have.jsonBody('users');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Count is greater than zero\", function () {\r",
+							"    pm.expect(pm.response.json().count).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Each user has a valid ID\", function () {\r",
+							"    const users = pm.response.json().users;\r",
+							"    pm.expect(users).to.be.an('array');\r",
+							"    pm.expect(users.every(user => Number.isInteger(user.id))).to.be.true;\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "X-AUTH-SECRET-KEY",
+						"value": "ROADTOSDET",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://dmoney.roadtocareer.net/user/list",
+					"protocol": "http",
+					"host": [
+						"dmoney",
+						"roadtocareer",
+						"net"
+					],
+					"path": [
+						"user",
+						"list"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				},
+				"description": "Endpoint to get the list of users."
+			},
+			"response": []
+		},
+		{
+			"name": "Search User",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "X-AUTH-SECRET-KEY",
+						"value": "ROADTOSDET",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://dmoney.roadtocareer.net/user/search?id=22263",
+					"protocol": "http",
+					"host": [
+						"dmoney",
+						"roadtocareer",
+						"net"
+					],
+					"path": [
+						"user",
+						"search"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "22263"
+						}
+					]
+				},
+				"description": "Endpoint to search for a user by ID."
+			},
+			"response": []
+		},
+		{
+			"name": "Create User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response contains message and user\", function () {\r",
+							"    pm.response.to.have.jsonBody('message', 'User created');\r",
+							"    pm.response.to.have.jsonBody('user');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"User has a valid ID\", function () {\r",
+							"    const user = pm.response.json().user;\r",
+							"    pm.expect(user.id).to.be.a('number');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"User has the correct role\", function () {\r",
+							"    const user = pm.response.json().user;\r",
+							"    pm.expect(user.role).to.eql(\"Customer\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "X-AUTH-SECRET-KEY",
+						"value": "ROADTOSDET",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Tanim122\",\n    \"email\":\"anim122@test.com\",\n    \"password\":\"123422\",\n    \"phone_number\":\"01527828708\",\n    \"nid\":\"12345229\",\n    \"role\":\"Customer\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://dmoney.roadtocareer.net/user/create",
+					"protocol": "http",
+					"host": [
+						"dmoney",
+						"roadtocareer",
+						"net"
+					],
+					"path": [
+						"user",
+						"create"
+					]
+				},
+				"description": "Endpoint to create a new user."
+			},
+			"response": []
+		},
+		{
+			"name": "Update User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response contains message and user\", function () {\r",
+							"    pm.response.to.have.jsonBody('message', 'User updated');\r",
+							"    pm.response.to.have.jsonBody('user');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"User has the correct role\", function () {\r",
+							"    const user = pm.response.json().user;\r",
+							"    pm.expect(user.role).to.eql(\"Customer\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "X-AUTH-SECRET-KEY",
+						"value": "ROADTOSDET",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Tanim12\",\n    \"email\":\"anim12@test.com\",\n    \"password\":\"12342\",\n    \"phone_number\":\"01547828708\",\n    \"nid\":\"127345279\",\n    \"role\":\"Customer\"\n}\n\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://dmoney.roadtocareer.net/user/update/22263",
+					"protocol": "http",
+					"host": [
+						"dmoney",
+						"roadtocareer",
+						"net"
+					],
+					"path": [
+						"user",
+						"update",
+						"22263"
+					]
+				},
+				"description": "Endpoint to update an existing user."
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response contains message\", function () {\r",
+							"    pm.response.to.have.jsonBody('message', 'User deleted successfully');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "X-AUTH-SECRET-KEY",
+						"value": "ROADTOSDET",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://dmoney.roadtocareer.net/user/delete/8969",
+					"protocol": "http",
+					"host": [
+						"dmoney",
+						"roadtocareer",
+						"net"
+					],
+					"path": [
+						"user",
+						"delete",
+						"8969"
+					]
+				},
+				"description": "Endpoint to delete a user by ID."
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "Dmoneytoken",
+			"value": "Dmoneytoken"
+		}
+	]
+}
